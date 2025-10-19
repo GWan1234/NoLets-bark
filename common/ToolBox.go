@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -113,20 +112,6 @@ func FilterShortStrings(input []string, minNumber, maxNumber int) []string {
 		if len(s) >= minNumber && len(s) <= maxNumber {
 			result = append(result, s)
 		}
-	}
-	return result
-}
-
-func RemoveSymbols(input string) string {
-	// 使用正则表达式匹配非字母数字字符，并将其替换为空
-	re := regexp.MustCompile(`[^a-zA-Z0-9]`)
-	return re.ReplaceAllString(input, "")
-}
-
-func RemoveListSymbols(inputs []string) []string {
-	var result []string
-	for _, s := range inputs {
-		result = append(result, RemoveSymbols(s))
 	}
 	return result
 }

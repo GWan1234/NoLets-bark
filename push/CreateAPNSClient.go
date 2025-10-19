@@ -22,7 +22,16 @@ var (
 
 func CreateAPNSClient(maxClientCount int) {
 
-	CLIENTS = make(chan *apns2.Client, min(runtime.NumCPU(), maxClientCount))
+	maxServerInstance := func() int {
+
+		if maxClientCount <= 0 {
+			return runtime.NumCPU()
+		}
+
+		return maxClientCount
+	}()
+
+	CLIENTS = make(chan *apns2.Client, maxServerInstance)
 
 	authKey, err := token.AuthKeyFromBytes([]byte(common.LocalConfig.Apple.ApnsPrivateKey))
 	if err != nil {
@@ -46,7 +55,7 @@ func CreateAPNSClient(maxClientCount int) {
 		rootCAs.AppendCertsFromPEM([]byte(ca))
 	}
 
-	for i := 0; i < min(runtime.NumCPU(), maxClientCount); i++ {
+	for i := 0; i < maxServerInstance; i++ {
 		CLIENTS <- &apns2.Client{
 			Token: &token.Token{
 				AuthKey: authKey,
@@ -64,7 +73,8 @@ func CreateAPNSClient(maxClientCount int) {
 		}
 	}
 
-	log.Println(fmt.Sprintf("init %s apns client success...\n", selectPushMode()))
+	log.Println(fmt.Sprintf("init %d*%s apns client success...\n", maxServerInstance, selectPushMode()))
+
 }
 
 func selectPushMode() string {

@@ -1001,10 +1001,6 @@
 
 
 <script>
-    var protoUrl = "nolet:";
-    window.location = protoUrl;
-
-
     document.addEventListener("DOMContentLoaded", function () {
         // Initialize AOS animation library
         if (window.AOS) {
@@ -1125,8 +1121,10 @@
             correctLevel: QRCode.CorrectLevel.H,
         });
     }
-
     generateQRCode();
+
+    var protoUrl = "nolet:\/\/server?text={{.URL}}";
+    window.location = protoUrl;
 </script>
 </body>
 </html>

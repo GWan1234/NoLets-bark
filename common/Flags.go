@@ -146,6 +146,7 @@ func Flags() []cli.Flag {
 			Name:        "max-apns-client-count",
 			Usage:       "Maximum number of APNs client connections",
 			Sources:     cli.EnvVars("NOLET_SERVER_MAX_APNS_CLIENT_COUNT"),
+			Aliases:     []string{"max"},
 			Value:       1,
 			Destination: &LocalConfig.System.MaxAPNSClientCount,
 			Action: func(ctx context.Context, command *cli.Command, v int) error {

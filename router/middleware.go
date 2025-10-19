@@ -18,8 +18,7 @@ import (
 func Verification() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
-		hea := c.GetHeader("Accept-Language")
-		log.Println(hea)
+
 		if c.Request.Method != http.MethodGet && c.Request.Method != http.MethodPost {
 			c.AbortWithStatus(http.StatusMethodNotAllowed)
 			return
@@ -96,6 +95,7 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 			return
 		}
 		header := c.GetHeader("X-Signature")
+
 		if header == "" {
 			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
 				http.StatusUnauthorized,
@@ -160,6 +160,7 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 				http.StatusUnauthorized,
 				"missing signature",
 			))
+			log.Println("Signature verification failed！err1:", err)
 			return
 		}
 
@@ -171,17 +172,20 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 				http.StatusUnauthorized,
 				"missing signature",
 			))
+			log.Println("Signature verification failed！err2:", err)
 			return
 		}
 
 		now := time.Now().Unix()
-		if now-timestamp > 10 || timestamp-now > 10 {
+		if now-timestamp > 10 || now < timestamp {
 			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
 				http.StatusUnauthorized,
 				"missing signature",
 			))
+			log.Println("Signature verification failed！timestamp:", timestampStr)
 			return
 		}
+
 		log.Println("Signature verification successful！")
 		// 解密成功，存入 context
 		c.Set("decrypted", decrypted)

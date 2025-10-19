@@ -10,7 +10,7 @@ var LocalConfig = &Config{
 		User:                  "",
 		Password:              "",
 		SignKey:               "",
-		Addr:                  "0.0.0.0:8080",
+		Addr:                  "0.0.0.0:80",
 		URLPrefix:             "/",
 		DataDir:               "./data",
 		DSN:                   "",

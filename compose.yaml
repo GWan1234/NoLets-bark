@@ -8,6 +8,8 @@ services:
       - "8080:8080"
     volumes:
       - ./data:/data
+    environment:
+      - NOLET_SIGN_KEY=
 
 #  mysql:
 #    image: mysql:8.0.28-debian

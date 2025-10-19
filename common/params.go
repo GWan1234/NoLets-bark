@@ -56,13 +56,13 @@ func NewParamsResult(c *gin.Context) *ParamsResult {
 
 	if keys, ok := main.Params.Get(DeviceKeys); ok {
 		if vals, oka := keys.([]string); oka {
-			resultKeys = RemoveListSymbols(vals)
+			resultKeys = vals
 		}
 	}
 
 	if key, ok := main.Params.Get(DeviceKey); ok {
 		if val, oka := key.(string); oka {
-			resultKeys = append(resultKeys, RemoveSymbols(val))
+			resultKeys = append(resultKeys, val)
 		}
 
 	}
@@ -146,9 +146,9 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 	getDeviceKey := func(value string) {
 		deviceKeys := strings.Split(value, ",")
 		if len(deviceKeys) > 1 {
-			result.Set(DeviceKeys, RemoveListSymbols(deviceKeys))
+			result.Set(DeviceKeys, deviceKeys)
 		} else {
-			result.Set(DeviceKey, RemoveSymbols(value))
+			result.Set(DeviceKey, value)
 		}
 	}
 
@@ -177,9 +177,9 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 			lowKey := p.NormalizeKey(key)
 			if len(values) > 0 {
 				if lowKey == DeviceKey {
-					keys = append(keys, RemoveListSymbols(values)...)
+					keys = append(keys, values...)
 				} else {
-					result.Set(lowKey, RemoveSymbols(values[0]))
+					result.Set(lowKey, values[0])
 				}
 			}
 
@@ -187,9 +187,9 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 
 		if keysNum := len(keys); keysNum > 0 {
 			if keysNum == 1 {
-				result.Set(DeviceKey, RemoveSymbols(keys[0]))
+				result.Set(DeviceKey, keys[0])
 			} else {
-				result.Set(DeviceKeys, RemoveListSymbols(keys))
+				result.Set(DeviceKeys, keys)
 			}
 		}
 	}

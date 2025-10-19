@@ -21,7 +21,10 @@ func SetupRouter(router *gin.Engine) {
 
 	router.GET("/upload", controller.Upload)
 	router.POST("/upload", controller.Upload)
-	router.GET("/.well-known/apple-app-site-association", controller.AppleSite)
+	wellKnowGroup := router.Group("/.well-known")
+	{
+		wellKnowGroup.GET("/apple-app-site-association", controller.AppleSite)
+	}
 	// 推送请求
 	router.POST("/push", controller.BasePush)
 	// 获取设备Token
