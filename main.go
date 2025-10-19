@@ -81,7 +81,7 @@ func main() {
 				}
 
 			}
-			log.Println(common.LocalConfig)
+
 			server := &http.Server{
 				Addr:           systemConfig.Addr,
 				Handler:        engine,

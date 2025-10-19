@@ -18,7 +18,8 @@ import (
 func Verification() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
-
+		hea := c.GetHeader("Accept-Language")
+		log.Println(hea)
 		if c.Request.Method != http.MethodGet && c.Request.Method != http.MethodPost {
 			c.AbortWithStatus(http.StatusMethodNotAllowed)
 			return
@@ -84,11 +85,8 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 		c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 512)
 
 		userAgent := c.GetHeader(common.HeaderUserAgent)
-		if !strings.HasPrefix(userAgent, common.LocalConfig.System.Name) {
-			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
-				http.StatusUnauthorized,
-				"SB",
-			))
+		if !strings.HasPrefix(strings.ToLower(userAgent), strings.ToLower(common.APPNAME)) {
+			c.AbortWithStatusJSON(http.StatusOK, common.Failed(http.StatusUnauthorized, "SB"))
 			return
 		}
 

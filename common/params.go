@@ -56,13 +56,13 @@ func NewParamsResult(c *gin.Context) *ParamsResult {
 
 	if keys, ok := main.Params.Get(DeviceKeys); ok {
 		if vals, oka := keys.([]string); oka {
-			resultKeys = vals
+			resultKeys = RemoveListSymbols(vals)
 		}
 	}
 
 	if key, ok := main.Params.Get(DeviceKey); ok {
 		if val, oka := key.(string); oka {
-			resultKeys = append(resultKeys, val)
+			resultKeys = append(resultKeys, RemoveSymbols(val))
 		}
 
 	}
@@ -146,9 +146,9 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 	getDeviceKey := func(value string) {
 		deviceKeys := strings.Split(value, ",")
 		if len(deviceKeys) > 1 {
-			result.Set(DeviceKeys, deviceKeys)
+			result.Set(DeviceKeys, RemoveListSymbols(deviceKeys))
 		} else {
-			result.Set(DeviceKey, value)
+			result.Set(DeviceKey, RemoveSymbols(value))
 		}
 	}
 
@@ -177,9 +177,9 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 			lowKey := p.NormalizeKey(key)
 			if len(values) > 0 {
 				if lowKey == DeviceKey {
-					keys = append(keys, values...)
+					keys = append(keys, RemoveListSymbols(values)...)
 				} else {
-					result.Set(lowKey, values[0])
+					result.Set(lowKey, RemoveSymbols(values[0]))
 				}
 			}
 
@@ -187,9 +187,9 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 
 		if keysNum := len(keys); keysNum > 0 {
 			if keysNum == 1 {
-				result.Set(DeviceKey, keys[0])
+				result.Set(DeviceKey, RemoveSymbols(keys[0]))
 			} else {
-				result.Set(DeviceKeys, keys)
+				result.Set(DeviceKeys, RemoveListSymbols(keys))
 			}
 		}
 	}
@@ -198,7 +198,7 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 	if c.Request.Method == http.MethodPost {
 
 		contentType := c.Request.Header.Get("Content-Type")
-		if strings.HasPrefix(contentType, "application/json") {
+		if strings.HasPrefix(contentType, MIMEApplicationJSON) {
 			var jsonData map[string]interface{}
 			err := c.ShouldBindBodyWithJSON(&jsonData)
 			if err == nil {

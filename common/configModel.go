@@ -23,7 +23,6 @@ type System struct {
 	Addr                  string        `mapstructure:"addr" json:"addr" yaml:"addr" koanf:"addr"`
 	URLPrefix             string        `mapstructure:"url_prefix" json:"url_prefix" yaml:"url_prefix" koanf:"url_prefix"`
 	DataDir               string        `mapstructure:"data" json:"data" yaml:"data" koanf:"data"`
-	Name                  string        `mapstructure:"name" json:"name" yaml:"name" koanf:"name"`
 	DSN                   string        `mapstructure:"dsn" json:"dsn" yaml:"dsn" koanf:"dsn"`
 	Cert                  string        `mapstructure:"cert" json:"cert" yaml:"cert" koanf:"cert"`
 	Key                   string        `mapstructure:"key" json:"key" yaml:"key" koanf:"key"`
@@ -91,9 +90,7 @@ func (global *Config) SetConfig(configPath string) {
 	if len(conf.System.DataDir) > 0 {
 		global.System.DataDir = conf.System.DataDir
 	}
-	if len(conf.System.Name) > 0 {
-		global.System.Name = conf.System.Name
-	}
+
 	if len(conf.System.DSN) > 0 {
 		global.System.DSN = conf.System.DSN
 	}

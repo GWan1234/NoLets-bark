@@ -17,7 +17,7 @@ type MySQL struct {
 var mysqlDB *sql.DB
 
 func CreateDbSchema() string {
-	return fmt.Sprintf("CREATE TABLE IF NOT EXISTS  `%s` (", common.LocalConfig.System.Name) +
+	return fmt.Sprintf("CREATE TABLE IF NOT EXISTS  `%s` (", common.APPNAME) +
 		"    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT," +
 		"    `key` VARCHAR(255) NOT NULL," +
 		"    `token` VARCHAR(255) NOT NULL," +
@@ -44,7 +44,7 @@ func NewMySQL(dsn string) (Database, error) {
 
 func (d *MySQL) CountAll() (int, error) {
 	var count int
-	rawString := fmt.Sprintf("SELECT COUNT(1) FROM `%s`", common.LocalConfig.System.Name)
+	rawString := fmt.Sprintf("SELECT COUNT(1) FROM `%s`", common.APPNAME)
 	err := mysqlDB.QueryRow(rawString).Scan(&count)
 	if err != nil {
 		return 0, err
@@ -55,7 +55,7 @@ func (d *MySQL) CountAll() (int, error) {
 
 func (d *MySQL) DeviceTokenByKey(key string) (string, error) {
 	var token string
-	rawString := fmt.Sprintf("SELECT `token` FROM `%s` WHERE `key`=?", common.LocalConfig.System.Name)
+	rawString := fmt.Sprintf("SELECT `token` FROM `%s` WHERE `key`=?", common.APPNAME)
 	err := mysqlDB.QueryRow(rawString, key).Scan(&token)
 	if err != nil {
 		return "", err
@@ -69,7 +69,7 @@ func (d *MySQL) SaveDeviceTokenByKey(key, token string) (string, error) {
 		// Generate a new UUID as the deviceKey when a new device register
 		key = shortuuid.New()
 	}
-	rawString := fmt.Sprintf("INSERT INTO `%s` (`key`,`token`) VALUES (?,?) ON DUPLICATE KEY UPDATE `token`=?", common.LocalConfig.System.Name)
+	rawString := fmt.Sprintf("INSERT INTO `%s` (`key`,`token`) VALUES (?,?) ON DUPLICATE KEY UPDATE `token`=?", common.APPNAME)
 
 	_, err := mysqlDB.Exec(rawString, key, token, token)
 	if err != nil {
@@ -85,7 +85,7 @@ func (d *MySQL) Close() error {
 
 func (d *MySQL) KeyExists(key string) bool {
 	var exists bool
-	rawString := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM `%s` WHERE `key`=?)", common.LocalConfig.System.Name)
+	rawString := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM `%s` WHERE `key`=?)", common.APPNAME)
 	err := mysqlDB.QueryRow(rawString, key).Scan(&exists)
 	if err != nil {
 		log.Println(fmt.Sprintf("failed to check key existence: %v", err))

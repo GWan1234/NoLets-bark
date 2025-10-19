@@ -42,3 +42,7 @@ const (
 	MIMEImageSvg        = "image/svg+xml"
 	MIMEApplicationJSON = "application/json"
 )
+
+const (
+	APPNAME = "NoLet"
+)

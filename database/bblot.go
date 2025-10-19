@@ -27,7 +27,7 @@ func NewBboltdb(dataDir string) Database {
 func (d *BboltDB) CountAll() (int, error) {
 	var keypairCount int
 	err := BBDB.View(func(tx *bbolt.Tx) error {
-		keypairCount = tx.Bucket([]byte(common.LocalConfig.System.Name)).Stats().KeyN
+		keypairCount = tx.Bucket([]byte(common.APPNAME)).Stats().KeyN
 		return nil
 	})
 
@@ -45,7 +45,7 @@ func (d *BboltDB) Close() error {
 func (d *BboltDB) DeviceTokenByKey(key string) (string, error) {
 	var token string
 	err := BBDB.View(func(tx *bbolt.Tx) error {
-		if bs := tx.Bucket([]byte(common.LocalConfig.System.Name)).Get([]byte(key)); bs == nil {
+		if bs := tx.Bucket([]byte(common.APPNAME)).Get([]byte(key)); bs == nil {
 			return fmt.Errorf("failed to get [%s] device token from database", key)
 		} else {
 			token = string(bs)
@@ -64,7 +64,7 @@ func (d *BboltDB) DeviceTokenByKey(key string) (string, error) {
 func (d *BboltDB) SaveDeviceTokenByKey(key, deviceToken string) (string, error) {
 	err := BBDB.Update(func(tx *bbolt.Tx) error {
 
-		bucket := tx.Bucket([]byte(common.LocalConfig.System.Name))
+		bucket := tx.Bucket([]byte(common.APPNAME))
 		// If the deviceKey is empty or the corresponding deviceToken cannot be obtained from the database,
 		// it is considered as a new device registration
 		if key == "" {
@@ -94,13 +94,13 @@ func bboltSetup(dataDir string) {
 			log.Println(fmt.Sprintf("failed to open database storage dir(%s): %v", dataDir, err))
 		}
 
-		bboltDB, err := bbolt.Open(filepath.Join(dataDir, common.LocalConfig.System.Name+".db"), 0600, nil)
+		bboltDB, err := bbolt.Open(filepath.Join(dataDir, common.APPNAME+".db"), 0600, nil)
 		if err != nil {
-			log.Println(fmt.Sprintf("failed to create file (%s): %v", filepath.Join(dataDir, common.LocalConfig.System.Name+".db"), err))
+			log.Println(fmt.Sprintf("failed to create file (%s): %v", filepath.Join(dataDir, common.APPNAME+".db"), err))
 		}
 
 		err = bboltDB.Update(func(tx *bbolt.Tx) error {
-			_, err = tx.CreateBucketIfNotExists([]byte(common.LocalConfig.System.Name))
+			_, err = tx.CreateBucketIfNotExists([]byte(common.APPNAME))
 			return err
 		})
 		if err != nil {
@@ -114,9 +114,9 @@ func bboltSetup(dataDir string) {
 // KeyExists 检查指定的 key 是否存在于数据库中，只返回 bool 值
 func (d *BboltDB) KeyExists(key string) bool {
 	err := BBDB.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket([]byte(common.LocalConfig.System.Name))
+		bucket := tx.Bucket([]byte(common.APPNAME))
 		if bucket == nil {
-			return fmt.Errorf("bucket %s not found", common.LocalConfig.System.Name)
+			return fmt.Errorf("bucket %s not found", common.APPNAME)
 		}
 		// 检查 key 是否存在
 		if bucket.Get([]byte(key)) != nil {

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sunvc/NoLets/common"
 	"github.com/sunvc/NoLets/serverInfo"
 )
 
@@ -15,5 +16,5 @@ func GetServerInfo(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{})
 		return
 	}
-	c.Data(http.StatusOK, "application/json", data)
+	c.Data(http.StatusOK, common.MIMEApplicationJSON, data)
 }
