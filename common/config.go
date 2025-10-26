@@ -2,7 +2,10 @@ package common
 
 import (
 	_ "embed"
+	"os"
 	"time"
+
+	"github.com/goccy/go-yaml"
 )
 
 var LocalConfig = &Config{
@@ -62,5 +65,28 @@ func SetDefaultVersionOrCommID(version, buildDate, commID string) {
 		LocalConfig.System.BuildDate = buildDate
 	} else {
 		LocalConfig.System.BuildDate = "2025-01-01 09:20:33"
+	}
+}
+
+// SynchronousFieldFile Prevent problems with the fields
+func SynchronousFieldFile() {
+	data, err := yaml.Marshal(LocalConfig)
+	if err != nil {
+		panic(err)
+	}
+
+	header := `# ============================================
+# Meoworld Server Configuration
+# Generated automatically. Do not edit manually.
+# Modify values carefully, then restart the service.
+# ============================================
+
+`
+	// 拼接注释头 + YAML 内容
+	finalData := append([]byte(header), data...)
+
+	// 输出到文件
+	if err = os.WriteFile("config.yaml", finalData, 0644); err != nil {
+		panic(err)
 	}
 }

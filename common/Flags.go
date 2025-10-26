@@ -21,6 +21,13 @@ func Flags() []cli.Flag {
 				return nil
 			},
 		},
+		&cli.BoolFlag{
+			Name: "build-test",
+			Action: func(ctx context.Context, command *cli.Command, s bool) error {
+				SynchronousFieldFile()
+				return cli.Exit("create success ...", 0)
+			},
+		},
 		&cli.StringFlag{
 			Name:        "url-prefix",
 			Usage:       "Serve URL Prefix",

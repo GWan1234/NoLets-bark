@@ -36,9 +36,9 @@ type System struct {
 	WriteTimeout          time.Duration `mapstructure:"write_timeout" json:"write_timeout" yaml:"write_timeout" koanf:"write_timeout"`
 	IdleTimeout           time.Duration `mapstructure:"idle_timeout" json:"idle_timeout" yaml:"idle_timeout" koanf:"idle_timeout"`
 	Debug                 bool          `mapstructure:"debug" json:"debug" yaml:"debug" koanf:"debug"`
-	Version               string        `mapstructure:"version" json:"version" yaml:"version" koanf:"version"`
-	BuildDate             string        `mapstructure:"build_date" json:"build_date" yaml:"build_date" koanf:"build_date"`
-	CommitID              string        `mapstructure:"commitID" json:"commitID" yaml:"commitID" koanf:"commitID"`
+	Version               string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
+	BuildDate             string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
+	CommitID              string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	Expired               float64       `mapstructure:"expired" json:"expired" yaml:"expired" koanf:"expired"`
 	ICPInfo               string        `mapstructure:"icp_info" json:"icp_info" yaml:"icp_info" koanf:"icp_info"`
 	TimeZone              string        `mapstructure:"time_zone" json:"time_zone" yaml:"time_zone" koanf:"time_zone"`
