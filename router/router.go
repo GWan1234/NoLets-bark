@@ -1,6 +1,8 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sunvc/NoLets/controller"
 )
@@ -42,4 +44,6 @@ func SetupRouter(router *gin.Engine) {
 	// 参数化的推送
 	router.GET("/:deviceKey", CheckDotParamMiddleware(), controller.BasePush)
 	router.POST("/:deviceKey", controller.BasePush)
+
+	router.NoRoute(func(context *gin.Context) { context.Status(http.StatusOK) })
 }

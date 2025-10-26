@@ -17,7 +17,7 @@ system:
   read_timeout: 3s
   write_timeout: 3s
   idle_timeout: 10s
-  debug: true
+  debug: false
   version: ""
   build_date: ""
   commitID: ""
@@ -38,4 +38,4 @@ apple:
   topic: "me.uuneo.Meoworld"
   keyID: "BNY5GUGV38"
   teamID: "FUWV6U942Q"
-  develop: true
+  develop: false

@@ -69,7 +69,6 @@ func Verification() gin.HandlerFunc {
 func CheckDotParamMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if value := c.Param("deviceKey"); strings.Contains(value, ".") {
-
 			controller.GetImage(c)
 			c.Abort()
 			return
