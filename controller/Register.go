@@ -58,6 +58,7 @@ func Register(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusOK, common.Failed(http.StatusInternalServerError, "device registration failed: %v", err))
+		return
 	}
 
 	c.JSON(http.StatusOK, common.Success(device))
