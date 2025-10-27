@@ -11,7 +11,7 @@ import (
 )
 
 func Info(c *gin.Context) {
-	admin, ok := c.Get("admin")
+	admin := Verification(c)
 	system := common.LocalConfig.System
 
 	results := gin.H{
@@ -20,7 +20,7 @@ func Info(c *gin.Context) {
 		"commit":  system.CommitID,
 	}
 
-	if ok && admin.(bool) {
+	if admin {
 		devices, _ := database.DB.CountAll()
 		results["devices"] = devices
 		results["arch"] = runtime.GOOS + "/" + runtime.GOARCH
@@ -40,3 +40,8 @@ func Ping(c *gin.Context) {
 }
 
 func Health(c *gin.Context) { c.String(http.StatusOK, "OK") }
+
+func Verification(c *gin.Context) bool {
+	admin, ok := c.Get("admin")
+	return ok && admin.(bool)
+}

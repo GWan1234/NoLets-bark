@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"embed"
 	"errors"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -42,6 +43,13 @@ func main() {
 		Flags:   common.Flags(),
 		Authors: []any{"to@uuneo.com"},
 		Action: func(_ context.Context, command *cli.Command) error {
+			
+			if _, err := os.Stat(common.BaseDir()); os.IsNotExist(err) {
+				if err = os.MkdirAll(common.BaseDir(), 0755); err != nil {
+					log.Println(fmt.Sprintf("failed to create database storage dir(%s): %v", common.BaseDir(), err))
+					panic("failed to create database storage dir")
+				}
+			}
 
 			if configPath := command.String("config"); configPath != "" {
 				common.LocalConfig.SetConfig(configPath)

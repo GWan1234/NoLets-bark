@@ -17,7 +17,7 @@ func BasePush(c *gin.Context) {
 	result := common.NewParamsResult(c)
 
 	if result == nil {
-		c.JSON(http.StatusOK, common.Failed(http.StatusBadRequest, "Not Params"))
+		c.JSON(http.StatusOK, common.Failed(http.StatusBadRequest, "Incorrect Format"))
 		return
 	}
 

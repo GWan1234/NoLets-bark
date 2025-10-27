@@ -24,10 +24,10 @@ func Register(c *gin.Context) {
 			c.JSON(http.StatusOK, common.Success())
 			return
 		} else {
-			admin, ok := c.Get("admin")
+			admin := Verification(c)
 
-			if ok && admin.(bool) {
-				_, err := database.DB.SaveDeviceTokenByKey(deviceKey, "")
+			if admin {
+				_, err := database.DB.SaveDeviceTokenByKey(deviceKey, "", "")
 				if err != nil {
 					c.JSON(http.StatusOK, common.Failed(http.StatusBadRequest, "device key is not exist"))
 					return
@@ -54,7 +54,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	device.Key, err = database.DB.SaveDeviceTokenByKey(device.Key, device.Token)
+	device.Key, err = database.DB.SaveDeviceTokenByKey(device.Key, device.Token, device.Group)
 
 	if err != nil {
 		c.JSON(http.StatusOK, common.Failed(http.StatusInternalServerError, "device registration failed: %v", err))

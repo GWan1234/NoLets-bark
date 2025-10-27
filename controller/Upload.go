@@ -18,14 +18,14 @@ import (
 // POST: 上传图片并保存
 func Upload(c *gin.Context) {
 	// 验证管理员权限
-	admin, ok := c.Get("admin")
+	admin := Verification(c)
 
 	if c.Request.Method == "GET" {
 		c.HTML(http.StatusOK, "upload.html", gin.H{})
 		return
 	}
 
-	if !ok || !admin.(bool) {
+	if !admin {
 		log.Println("Unauthorized upload attempt")
 		c.AbortWithStatus(http.StatusUnauthorized)
 		return

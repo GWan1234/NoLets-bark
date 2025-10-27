@@ -4,11 +4,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sunvc/NoLets/common"
 	"github.com/sunvc/NoLets/controller"
 )
 
-func SetupRouter(router *gin.Engine) {
-
+func SetupRouter(engine *gin.Engine) {
+	router := engine.Group(common.LocalConfig.System.URLPrefix)
 	router.GET("/", controller.Home)
 	router.GET("/info", controller.Info)
 
@@ -30,7 +31,7 @@ func SetupRouter(router *gin.Engine) {
 	// 推送请求
 	router.POST("/push", controller.BasePush)
 	// 获取设备Token
-	router.GET("/:deviceKey/token", controller.GetDeviceToken)
+	router.GET("token/:deviceKey", controller.GetDeviceToken)
 	// title subtitle body
 	router.GET("/:deviceKey/:params1/:params2/:params3", controller.BasePush)
 	router.POST("/:deviceKey/:params1/:params2/:params3", controller.BasePush)
@@ -45,5 +46,11 @@ func SetupRouter(router *gin.Engine) {
 	router.GET("/:deviceKey", CheckDotParamMiddleware(), controller.BasePush)
 	router.POST("/:deviceKey", controller.BasePush)
 
-	router.NoRoute(func(context *gin.Context) { context.Status(http.StatusOK) })
+	engine.NoRoute(func(context *gin.Context) {
+		context.AbortWithStatus(http.StatusNotFound)
+	})
+
+	engine.NoMethod(func(context *gin.Context) {
+		context.AbortWithStatus(http.StatusMethodNotAllowed)
+	})
 }

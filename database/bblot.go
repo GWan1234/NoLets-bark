@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/lithammer/shortuuid/v3"
 	"github.com/sunvc/NoLets/common"
 	"go.etcd.io/bbolt"
 )
@@ -59,9 +58,12 @@ func (d *BboltDB) DeviceTokenByKey(key string) (string, error) {
 	return token, nil
 }
 
-// SaveDeviceToken create or update device token of specified key
+func (d *BboltDB) DeviceTokenByGroup(group string) ([]string, error) {
+	return []string{}, nil
+}
 
-func (d *BboltDB) SaveDeviceTokenByKey(key, deviceToken string) (string, error) {
+// SaveDeviceTokenByKey create or update device token of specified key
+func (d *BboltDB) SaveDeviceTokenByKey(key, token, group string) (string, error) {
 	err := BBDB.Update(func(tx *bbolt.Tx) error {
 
 		bucket := tx.Bucket([]byte(common.APPNAME))
@@ -69,10 +71,10 @@ func (d *BboltDB) SaveDeviceTokenByKey(key, deviceToken string) (string, error) 
 		// it is considered as a new device registration
 		if key == "" {
 			// Generate a new UUID as the deviceKey when a new device register
-			key = shortuuid.New()
+			key = common.UserID()
 		}
 		// update the deviceToken
-		return bucket.Put([]byte(key), []byte(deviceToken))
+		return bucket.Put([]byte(key), []byte(token))
 	})
 
 	if err != nil {

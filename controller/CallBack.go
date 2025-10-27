@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"log"
 	"sync"
 	"time"
 
@@ -25,7 +24,7 @@ func CirclePush() {
 		defer ticker.Stop()
 
 		for range ticker.C {
-			log.Println("开始检查未推送数据")
+
 			NotPushedDataList.Range(func(key, value any) bool {
 				data1, ok := value.(*common.NotPushedData)
 				if !ok {
@@ -78,9 +77,4 @@ func UpdateNotPushedData(id string, params *common.ParamsResult, pushType apns2.
 			PushType:     pushType,
 		})
 	}
-}
-
-// RemoveNotPushedData 删除数据
-func RemoveNotPushedData(id string) {
-	NotPushedDataList.Delete(id)
 }

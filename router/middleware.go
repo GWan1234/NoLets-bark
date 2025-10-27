@@ -19,11 +19,6 @@ func Verification() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 
-		if c.Request.Method != http.MethodGet && c.Request.Method != http.MethodPost {
-			c.AbortWithStatus(http.StatusMethodNotAllowed)
-			return
-		}
-
 		// 先查看是否是管理员身份
 		authHeader := c.GetHeader("Authorization")
 		if common.Contains[string](common.LocalConfig.System.Auths, authHeader) && authHeader != "" {

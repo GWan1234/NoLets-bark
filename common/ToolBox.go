@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lithammer/shortuuid/v4"
 	"github.com/sunvc/apns2"
 )
 
@@ -114,4 +116,8 @@ func FilterShortStrings(input []string, minNumber, maxNumber int) []string {
 		}
 	}
 	return result
+}
+
+func UserID(name ...string) string {
+	return shortuuid.NewWithNamespace(strings.Join(name, ""))
 }

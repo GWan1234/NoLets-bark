@@ -15,7 +15,7 @@ import (
 func Home(c *gin.Context) {
 
 	if id := c.Query("id"); id != "" {
-		RemoveNotPushedData(id)
+		NotPushedDataList.Delete(id)
 		c.Status(http.StatusOK)
 		return
 	}
