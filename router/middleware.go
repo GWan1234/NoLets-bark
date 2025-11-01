@@ -1,9 +1,6 @@
 package router
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
-	"encoding/base64"
 	"log"
 	"net/http"
 	"strconv"
@@ -99,57 +96,8 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Base64 URL Safe -> 标准 Base64
-		header = strings.ReplaceAll(header, "-", "+")
-		header = strings.ReplaceAll(header, "_", "/")
-		if m := len(header) % 4; m != 0 {
-			header += strings.Repeat("=", 4-m)
-		}
+		timestampStr, err := common.Decrypt(header, common.LocalConfig.System.SignKey)
 
-		data, err := base64.StdEncoding.DecodeString(header)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
-				http.StatusUnauthorized,
-				"missing signature",
-			))
-			return
-		}
-
-		nonceSize := 12
-		tagSize := 16
-		if len(data) <= nonceSize+tagSize {
-
-			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
-				http.StatusUnauthorized,
-				"missing signature",
-			))
-			return
-		}
-
-		nonce := data[:nonceSize]
-		ciphertext := data[nonceSize : len(data)-tagSize]
-		tag := data[len(data)-tagSize:]
-
-		block, err := aes.NewCipher(key)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
-				http.StatusUnauthorized,
-				"missing signature",
-			))
-			return
-		}
-
-		aesgcm, err := cipher.NewGCM(block)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
-				http.StatusUnauthorized,
-				"missing signature",
-			))
-			return
-		}
-
-		// CryptoKit 是把 tag 单独放在尾部，需要拼接到 ciphertext
-		decrypted, err := aesgcm.Open(nil, nonce, append(ciphertext, tag...), nil)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
 				http.StatusUnauthorized,
@@ -158,8 +106,6 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 			log.Println("Signature verification failed！err1:", err)
 			return
 		}
-
-		timestampStr := string(decrypted)
 
 		timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
 		if err != nil {
@@ -183,7 +129,7 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 
 		log.Println("Signature verification successful！")
 		// 解密成功，存入 context
-		c.Set("decrypted", decrypted)
+		c.Set("decrypted", timestamp)
 		c.Next()
 
 	}

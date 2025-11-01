@@ -1,6 +1,10 @@
 package common
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -120,4 +124,60 @@ func FilterShortStrings(input []string, minNumber, maxNumber int) []string {
 
 func UserID(name ...string) string {
 	return shortuuid.NewWithNamespace(strings.Join(name, ""))
+}
+
+func InterfaceSliceToStringSlice(input []interface{}) []string {
+	result := make([]string, 0, len(input))
+	for _, v := range input {
+		if str, ok := v.(string); ok {
+			result = append(result, str)
+		} else {
+			// 如果类型不是 string，可以选择忽略或报错
+			// 这里选择忽略非字符串类型
+		}
+	}
+	return result
+}
+
+func Decrypt(signText string, key string) (string, error) {
+
+	// Base64 URL Safe -> 标准 Base64
+	signText = strings.ReplaceAll(signText, "-", "+")
+	signText = strings.ReplaceAll(signText, "_", "/")
+	if m := len(signText) % 4; m != 0 {
+		signText += strings.Repeat("=", 4-m)
+	}
+
+	data, err := base64.StdEncoding.DecodeString(signText)
+	if err != nil {
+		return "", errors.New("missing signature")
+	}
+
+	nonceSize := 12
+	tagSize := 16
+	if len(data) <= nonceSize+tagSize {
+		return "", errors.New("missing signature")
+	}
+	nonce := data[:nonceSize]
+	ciphertext := data[nonceSize : len(data)-tagSize]
+	tag := data[len(data)-tagSize:]
+
+	block, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		return "", errors.New("missing signature")
+	}
+
+	aesgcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return "", errors.New("missing signature")
+	}
+
+	// CryptoKit 是把 tag 单独放在尾部，需要拼接到 ciphertext
+	decrypted, err := aesgcm.Open(nil, nonce, append(ciphertext, tag...), nil)
+	if err != nil {
+
+		return "", errors.New("missing signature")
+	}
+
+	return string(decrypted), nil
 }

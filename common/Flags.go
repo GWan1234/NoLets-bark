@@ -346,5 +346,17 @@ REJP/5bp
 			Aliases: []string{"c"},
 			Value:   "",
 		},
+		&cli.BoolFlag{
+			Name:        "proxy-download",
+			Usage:       "Proxy Download",
+			Sources:     cli.EnvVars("NOLET_PROXY_DOWNLOAD"),
+			Aliases:     []string{"dp"},
+			Value:       false,
+			Destination: &LocalConfig.System.ProxyDownload,
+			Action: func(ctx context.Context, command *cli.Command, b bool) error {
+				LocalConfig.System.ProxyDownload = b
+				return nil
+			},
+		},
 	}
 }

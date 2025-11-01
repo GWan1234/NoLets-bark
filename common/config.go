@@ -28,6 +28,7 @@ var LocalConfig = &Config{
 		ReadTimeout:           3 * time.Second,
 		WriteTimeout:          3 * time.Second,
 		IdleTimeout:           10 * time.Second,
+		ProxyDownload:         false,
 		Debug:                 false,
 		Version:               "",
 		BuildDate:             "",

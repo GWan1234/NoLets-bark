@@ -39,6 +39,7 @@ type System struct {
 	Version               string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	BuildDate             string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	CommitID              string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
+	ProxyDownload         bool          `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	Expired               float64       `mapstructure:"expired" json:"expired" yaml:"expired" koanf:"expired"`
 	ICPInfo               string        `mapstructure:"icp_info" json:"icp_info" yaml:"icp_info" koanf:"icp_info"`
 	TimeZone              string        `mapstructure:"time_zone" json:"time_zone" yaml:"time_zone" koanf:"time_zone"`

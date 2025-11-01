@@ -28,6 +28,7 @@ func SetupRouter(engine *gin.Engine) {
 	{
 		wellKnowGroup.GET("/apple-app-site-association", controller.AppleSite)
 	}
+	
 	// 推送请求
 	router.POST("/push", controller.BasePush)
 	// 获取设备Token

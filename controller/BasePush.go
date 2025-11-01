@@ -25,12 +25,12 @@ func BasePush(c *gin.Context) {
 		for _, key := range result.Keys {
 			if len(key) > 5 {
 				if token, err := database.DB.DeviceTokenByKey(key); err == nil {
-
 					result.Tokens = append(result.Tokens, token)
 				}
 
 			}
 		}
+		result.Tokens = common.Unique(result.Tokens)
 	}
 
 	if len(result.Tokens) <= 0 {

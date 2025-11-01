@@ -55,8 +55,8 @@ func NewParamsResult(c *gin.Context) *ParamsResult {
 	var resultKeys []string
 
 	if keys, ok := main.Params.Get(DeviceKeys); ok {
-		if vals, oka := keys.([]string); oka {
-			resultKeys = vals
+		if vals, oka := keys.([]interface{}); oka {
+			resultKeys = InterfaceSliceToStringSlice(vals)
 		}
 	}
 
@@ -314,6 +314,10 @@ func ParamsNanAndDefault(paramsResult *ParamsResult) (resultType int) {
 
 	if !(titleNan && subTitleNan && bodyNan && cipherNan) {
 		resultType = 1
+	}
+
+	if !cipherNan {
+		paramsResult.Params.Set(Body, "-")
 	}
 
 	// setDefault 内部函数用于设置默认值
