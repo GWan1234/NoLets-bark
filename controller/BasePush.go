@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,24 @@ func BasePush(c *gin.Context) {
 			}
 		}
 		result.Tokens = common.Unique(result.Tokens)
+
+		passwd := common.LocalConfig.System.PushPassword
+
+		if len(passwd) > 0 && passwd == c.GetHeader("X-PUSH-PASSWD") {
+
+			if name, ok := result.Params.Get(common.PushGroupName); ok {
+
+				if nameStr, bok := name.(string); bok {
+
+					tokens, err := database.DB.DeviceTokenByGroup(nameStr)
+					log.Println("tokens:", tokens)
+					if err == nil && len(tokens) > 0 {
+						result.Tokens = append(result.Tokens, tokens...)
+					}
+				}
+
+			}
+		}
 	}
 
 	if len(result.Tokens) <= 0 {

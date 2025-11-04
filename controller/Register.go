@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -53,7 +54,7 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusOK, common.Failed(http.StatusBadRequest, "Invalid deviceToken"))
 		return
 	}
-
+	log.Println(device)
 	device.Key, err = database.DB.SaveDeviceTokenByKey(device.Key, device.Token, device.Group)
 
 	if err != nil {

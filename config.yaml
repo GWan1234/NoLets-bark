@@ -1,5 +1,5 @@
 # ============================================
-# NoLets Server Configuration
+# NoLet Server Configuration
 # Generated automatically. Do not edit manually.
 # Modify values carefully, then restart the service.
 # ============================================
@@ -7,23 +7,27 @@
 system:
   user: ""
   password: ""
-  sign_key: ""
+  push_password: ""
+  sign_key: ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF
   addr: 0.0.0.0:8080
   url_prefix: /
   data: ./data
-  dsn: ""
+  dsn: sqlite
   cert: ""
   key: ""
   reduce_memory_usage: false
   proxy_header: ""
   max_batch_push_count: -1
-  max_apns_client_count: 1
+  max_apns_client_count: 0
   max_device_key_arr_length: 10
   concurrency: 262144
   read_timeout: 3s
   write_timeout: 3s
   idle_timeout: 10s
-  debug: false
+  debug: true
+  proxyDownload: true
+  exportPath: ""
+  importPath: ""
   expired: 120.0
   icp_info: ""
   time_zone: ""
@@ -40,4 +44,4 @@ apple:
   topic: me.uuneo.Meoworld
   keyID: BNY5GUGV38
   teamID: FUWV6U942Q
-  develop: false
+  develop: true

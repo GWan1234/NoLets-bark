@@ -12,6 +12,7 @@ var LocalConfig = &Config{
 	System: System{
 		User:                  "",
 		Password:              "",
+		PushPassword:          "",
 		SignKey:               "",
 		Addr:                  "0.0.0.0:80",
 		URLPrefix:             "/",
@@ -79,7 +80,7 @@ func SynchronousFieldFile() {
 	}
 
 	header := `# ============================================
-# Meoworld Server Configuration
+# NoLet Server Configuration
 # Generated automatically. Do not edit manually.
 # Modify values carefully, then restart the service.
 # ============================================

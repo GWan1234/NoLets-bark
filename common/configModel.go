@@ -19,6 +19,7 @@ type Config struct {
 type System struct {
 	User                  string        `mapstructure:"user" json:"user" yaml:"user" koanf:"user"`
 	Password              string        `mapstructure:"password" json:"password" yaml:"password" koanf:"password"`
+	PushPassword          string        `mapstructure:"push_password" yaml:"push_password" koanf:"push_password"`
 	SignKey               string        `mapstructure:"sign_key" json:"sign_key" yaml:"sign_key" koanf:"sign_key"`
 	Addr                  string        `mapstructure:"addr" json:"addr" yaml:"addr" koanf:"addr"`
 	URLPrefix             string        `mapstructure:"url_prefix" json:"url_prefix" yaml:"url_prefix" koanf:"url_prefix"`
@@ -39,9 +40,9 @@ type System struct {
 	Version               string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	BuildDate             string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	CommitID              string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
-	ProxyDownload         bool          `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
-	ExportPath            string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
-	ImportPath            string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
+	ProxyDownload         bool          `mapstructure:"proxyDownload" json:"proxyDownload" yaml:"proxyDownload" koanf:"proxyDownload"`
+	ExportPath            string        `mapstructure:"exportPath" json:"exportPath" yaml:"exportPath" koanf:"exportPath"`
+	ImportPath            string        `mapstructure:"importPath" json:"importPath" yaml:"importPath" koanf:"importPath"`
 	Expired               float64       `mapstructure:"expired" json:"expired" yaml:"expired" koanf:"expired"`
 	ICPInfo               string        `mapstructure:"icp_info" json:"icp_info" yaml:"icp_info" koanf:"icp_info"`
 	TimeZone              string        `mapstructure:"time_zone" json:"time_zone" yaml:"time_zone" koanf:"time_zone"`

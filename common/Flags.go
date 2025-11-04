@@ -21,13 +21,6 @@ func Flags() []cli.Flag {
 				return nil
 			},
 		},
-		&cli.BoolFlag{
-			Name: "build-test",
-			Action: func(ctx context.Context, command *cli.Command, s bool) error {
-				SynchronousFieldFile()
-				return cli.Exit("create success ...", 0)
-			},
-		},
 		&cli.StringFlag{
 			Name:        "url-prefix",
 			Usage:       "Serve URL Prefix",
@@ -112,6 +105,17 @@ func Flags() []cli.Flag {
 			Value:       "",
 			Action: func(ctx context.Context, command *cli.Command, s string) error {
 				LocalConfig.System.Password = s
+				return nil
+			},
+		},
+		&cli.StringFlag{
+			Name:        "push-password",
+			Usage:       "push auth password",
+			Sources:     cli.EnvVars("NOLET_PUSH_PASSWORD"),
+			Destination: &LocalConfig.System.PushPassword,
+			Value:       "",
+			Action: func(ctx context.Context, command *cli.Command, s string) error {
+				LocalConfig.System.PushPassword = s
 				return nil
 			},
 		},
@@ -373,6 +377,14 @@ REJP/5bp
 			Aliases:     []string{"dl"},
 			Value:       "",
 			Destination: &LocalConfig.System.ExportPath,
+		},
+
+		&cli.BoolFlag{
+			Name: "build-test",
+			Action: func(ctx context.Context, command *cli.Command, s bool) error {
+				SynchronousFieldFile()
+				return cli.Exit("create success ...", 0)
+			},
 		},
 	}
 }
