@@ -23,6 +23,31 @@ func NewBboltdb(dataDir string) Database {
 	return &BboltDB{}
 }
 
+func (d *BboltDB) ExportOrImport(dataArr ...User) ([]User, error) {
+	var results []User
+	var errResults error
+	if len(dataArr) > 0 {
+		for _, user := range dataArr {
+			_, err := d.SaveDeviceTokenByKey(user.Key, user.Token, user.Group)
+			if err != nil {
+				results = append(results, user)
+				errResults = err
+			}
+		}
+		return results, errResults
+	} else {
+		var users []User
+		err := BBDB.View(func(tx *bbolt.Tx) error {
+			_ = tx.Bucket([]byte(common.APPNAME)).ForEach(func(k, v []byte) error {
+				users = append(users, User{Key: string(k), Token: string(v)})
+				return nil
+			})
+			return nil
+		})
+		return users, err
+	}
+}
+
 func (d *BboltDB) CountAll() (int, error) {
 	var keypairCount int
 	err := BBDB.View(func(tx *bbolt.Tx) error {

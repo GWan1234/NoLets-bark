@@ -358,5 +358,21 @@ REJP/5bp
 				return nil
 			},
 		},
+		&cli.StringFlag{
+			Name:        "export-path",
+			Usage:       "Export Database",
+			Sources:     cli.EnvVars("NOLET_EXPORT_PATH"),
+			Aliases:     []string{"dc"},
+			Value:       "",
+			Destination: &LocalConfig.System.ExportPath,
+		},
+		&cli.StringFlag{
+			Name:        "import-path",
+			Usage:       "Export Database",
+			Sources:     cli.EnvVars("NOLET_IMPORT_PATH"),
+			Aliases:     []string{"dl"},
+			Value:       "",
+			Destination: &LocalConfig.System.ExportPath,
+		},
 	}
 }

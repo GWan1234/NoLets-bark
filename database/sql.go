@@ -16,6 +16,20 @@ var isSqlite3 = false
 
 type NewSQL struct{}
 
+func (d *NewSQL) ExportOrImport(dataArr ...User) ([]User, error) {
+	if len(dataArr) > 0 {
+		if err := newDB.Save(&dataArr).Error; err != nil {
+			return []User{}, err
+		}
+		return []User{}, nil
+	} else {
+		var users []User
+		err := newDB.Model(&User{}).Find(&users).Error
+		return users, err
+	}
+
+}
+
 func (d *NewSQL) CountAll() (int, error) {
 	var count int64
 	result := newDB.Model(&User{}).Count(&count)

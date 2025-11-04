@@ -13,6 +13,7 @@ services:
     environment:
       - NOLET_SIGN_KEY=
       - NOLET_SERVER_DSN=root:root@tcp(mysql:3306)/NoLet?charset=utf8mb4&parseTime=True&loc=Local
+      - NOLET_AUTHS=13123
     networks:
       - backend
 
