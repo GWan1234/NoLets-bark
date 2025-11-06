@@ -68,15 +68,8 @@ release:
   name_template: "{{ .ProjectName }} {{ .Tag }}"
   mode: append
   header: |
-    Example:
-      ```sh
-        Download the binary of linux amd64
-        wget https://github.com/sunvc/NoLets/releases/download/<TAG>/<FILENAME>.tar.gz
-        tar -zxvf <FILENAME>.tar.gz
-        cd <FILENAME> || true
-        chmod +x NoLets
-        ./NoLets
-      ```
+    Example Download Links:
+     https://github.com/sunvc/NoLets/releases/download/{{ .Tag }}/{{ .ProjectName }}_linux_amd64.tar.gz 
   extra_files:
     - glob: ./pushback.p8
     - glob: ./config.yaml
