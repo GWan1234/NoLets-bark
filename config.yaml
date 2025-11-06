@@ -1,0 +1,47 @@
+# ============================================
+# NoLet Server Configuration
+# Generated automatically. Do not edit manually.
+# Modify values carefully, then restart the service.
+# ============================================
+
+system:
+  user: ""
+  password: ""
+  push_password: "123"
+  sign_key: ""
+  addr: 0.0.0.0:80
+  url_prefix: /
+  data: ./data
+  dsn: ""
+  cert: ""
+  key: ""
+  reduce_memory_usage: false
+  proxy_header: ""
+  max_batch_push_count: -1
+  max_apns_client_count: 1
+  max_device_key_arr_length: 10
+  concurrency: 262144
+  read_timeout: 3s
+  write_timeout: 3s
+  idle_timeout: 10s
+  debug: true
+  proxyDownload: false
+  exportPath: ""
+  importPath: ""
+  expired: 120.0
+  icp_info: ""
+  time_zone: ""
+  voice: false
+  auths: []
+apple:
+  apnsPrivateKey: |-
+    -----BEGIN PRIVATE KEY-----
+    MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgvjopbchDpzJNojnc
+    o7ErdZQFZM7Qxho6m61gqZuGVRigCgYIKoZIzj0DAQehRANCAAQ8ReU0fBNg+sA+
+    ZdDf3w+8FRQxFBKSD/Opt7n3tmtnmnl9Vrtw/nUXX4ldasxA2gErXR4YbEL9Z+uJ
+    REJP/5bp
+    -----END PRIVATE KEY-----
+  topic: me.uuneo.Meoworld
+  keyID: BNY5GUGV38
+  teamID: FUWV6U942Q
+  develop: false

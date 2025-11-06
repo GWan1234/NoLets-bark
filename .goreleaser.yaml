@@ -1,0 +1,95 @@
+version: 2
+
+project_name: NoLets
+
+builds:
+  - id: darwin
+    main: .
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - "-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}"
+    flags:
+      - -tags="sonic avx"
+    env:
+      - CGO_ENABLED=0
+
+  - id: linux
+    main: .
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    goamd64:
+      - v3
+    ldflags:
+      - "-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}"
+    flags:
+      - -tags="sonic avx"
+    env:
+      - CGO_ENABLED=0
+
+  - id: windows
+    main: .
+    goos:
+      - windows
+    goarch:
+      - amd64
+    goamd64:
+      - v3
+    ldflags:
+      - "-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}"
+    flags:
+      - -tags="sonic avx"
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - id: default
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    formats: [ 'tar.gz' ]
+    files:
+      - pushback.p8
+      - config.yaml
+      - LICENSE
+      - README.md
+      - README_EN.md
+      - README_KR.md
+      - README_JP.md
+
+release:
+  github:
+    owner: sunvc
+    name: NoLets
+  name_template: "{{ .ProjectName }} {{ .Tag }}"
+  mode: append
+  header: |
+    Example:
+      ```sh
+        Download the binary of linux amd64
+        wget https://github.com/sunvc/NoLets/releases/download/<TAG>/<FILENAME>.tar.gz
+        tar -zxvf <FILENAME>.tar.gz
+        cd <FILENAME> || true
+        chmod +x NoLets
+        ./NoLets
+      ```
+  extra_files:
+    - glob: ./pushback.p8
+    - glob: ./config.yaml
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  version_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
