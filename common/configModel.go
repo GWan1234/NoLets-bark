@@ -40,13 +40,12 @@ type System struct {
 	Version               string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	BuildDate             string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	CommitID              string        `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
+	CustomHttps           bool          `mapstructure:"-" json:"-" yaml:"-" koanf:"-"`
 	ProxyDownload         bool          `mapstructure:"proxyDownload" json:"proxyDownload" yaml:"proxyDownload" koanf:"proxyDownload"`
 	ExportPath            string        `mapstructure:"exportPath" json:"exportPath" yaml:"exportPath" koanf:"exportPath"`
 	ImportPath            string        `mapstructure:"importPath" json:"importPath" yaml:"importPath" koanf:"importPath"`
-	Expired               float64       `mapstructure:"expired" json:"expired" yaml:"expired" koanf:"expired"`
 	ICPInfo               string        `mapstructure:"icp_info" json:"icp_info" yaml:"icp_info" koanf:"icp_info"`
 	TimeZone              string        `mapstructure:"time_zone" json:"time_zone" yaml:"time_zone" koanf:"time_zone"`
-	Voice                 bool          `mapstructure:"voice" json:"voice" yaml:"voice" koanf:"voice"`
 	Auths                 []string      `mapstructure:"auths" json:"auths" yaml:"auths" koanf:"auths"`
 }
 
@@ -138,16 +137,14 @@ func (global *Config) SetConfig(configPath string) {
 	if len(conf.System.CommitID) > 0 {
 		global.System.CommitID = conf.System.CommitID
 	}
-	if conf.System.Expired > 0 {
-		global.System.Expired = conf.System.Expired
-	}
+
 	if len(conf.System.ICPInfo) > 0 {
 		global.System.ICPInfo = conf.System.ICPInfo
 	}
 	if len(conf.System.TimeZone) > 0 {
 		global.System.TimeZone = conf.System.TimeZone
 	}
-	global.System.Voice = conf.System.Voice
+
 	// 检查Apple字段
 	if len(conf.Apple.ApnsPrivateKey) > 0 {
 		global.Apple.ApnsPrivateKey = conf.Apple.ApnsPrivateKey
@@ -162,5 +159,4 @@ func (global *Config) SetConfig(configPath string) {
 		global.Apple.TeamID = conf.Apple.TeamID
 	}
 	global.Apple.Develop = conf.Apple.Develop
-
 }

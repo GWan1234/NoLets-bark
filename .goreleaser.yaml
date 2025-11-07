@@ -69,7 +69,7 @@ release:
   mode: append
   header: |
     Example Download Links:
-     https://github.com/sunvc/NoLets/releases/download/{{ .Tag }}/{{ .ProjectName }}_linux_amd64.tar.gz 
+     curl -L -H "os:linux-amd" -o nolets.tar.gz https://wzs.app
   extra_files:
     - glob: ./pushback.p8
     - glob: ./config.yaml

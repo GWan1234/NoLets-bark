@@ -44,8 +44,9 @@ func main() {
 		Flags:   common.Flags(),
 		Authors: []any{"to@uuneo.com"},
 		Action: func(_ context.Context, command *cli.Command) error {
-			if common.LocalConfig.System.Debug {
+			if common.LocalConfig.System.CustomHttps {
 				controller.CreateSSL()
+				common.LocalConfig.System.Addr = "0.0.0.0:8443"
 			}
 
 			if _, err := os.Stat(common.BaseDir()); os.IsNotExist(err) {

@@ -6,9 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sunvc/NoLets/common"
@@ -64,21 +62,7 @@ func ProxyDownload(c *gin.Context, data string) {
 
 	// 发起请求获取远程文件
 	// 2. 创建带超时的HTTP客户端
-	client := &http.Client{
-		Timeout: 10 * time.Second,
-	}
-
-	// 3. 使用Head请求先获取文件信息（可选）
-	headResp, err := client.Head(targetURL)
-	if err == nil {
-		// 检查文件大小
-		if contentLength := headResp.Header.Get("Content-Length"); contentLength != "" {
-			if size, _ := strconv.ParseInt(contentLength, 10, 64); size > 20*1024*1024 { // 限制100MB
-				c.String(http.StatusBadRequest, "file too large")
-				return
-			}
-		}
-	}
+	client := &http.Client{}
 
 	resp, err := client.Get(targetURL)
 	if err != nil {
@@ -121,18 +105,18 @@ func DownloadProject(c *gin.Context) {
 
 	// 发起请求获取远程文件
 	// 2. 创建带超时的HTTP客户端
-	client := &http.Client{
-		Timeout: 10 * time.Second,
-	}
+	client := &http.Client{}
 
 	url := fmt.Sprintf("https://github.com/sunvc/NoLets/releases/download/%s/NoLets_%s.tar.gz", common.LocalConfig.System.Version, name)
 	log.Println(url)
 	resp, err := client.Get(url)
+
+	defer resp.Body.Close()
+
 	if err != nil {
 		c.String(http.StatusBadGateway, "fetch error: %v", err)
 		return
 	}
-	defer resp.Body.Close()
 
 	// 设置返回头，保持文件名或类型
 	for k, v := range resp.Header {

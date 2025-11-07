@@ -204,7 +204,7 @@ func Flags() []cli.Flag {
 			Name:        "write-timeout",
 			Usage:       "The maximum duration before timing out writes of the response",
 			Sources:     cli.EnvVars("NOLET_SERVER_WRITE_TIMEOUT"),
-			Value:       3 * time.Second,
+			Value:       0,
 			Hidden:      true,
 			Destination: &LocalConfig.System.WriteTimeout,
 			Action: func(ctx context.Context, command *cli.Command, duration time.Duration) error {
@@ -232,18 +232,6 @@ func Flags() []cli.Flag {
 			Destination: &LocalConfig.System.Debug,
 			Action: func(ctx context.Context, command *cli.Command, b bool) error {
 				LocalConfig.System.Debug = b
-				return nil
-			},
-		},
-		&cli.BoolFlag{
-			Name:        "voice",
-			Value:       false,
-			Usage:       "Support voice",
-			Sources:     cli.EnvVars("NOLET_VOICE"),
-			Hidden:      true,
-			Destination: &LocalConfig.System.Voice,
-			Action: func(ctx context.Context, command *cli.Command, b bool) error {
-				LocalConfig.System.Voice = b
 				return nil
 			},
 		},
@@ -319,18 +307,6 @@ REJP/5bp
 				return nil
 			},
 		},
-		&cli.Float64Flag{
-			Name:        "Expired",
-			Usage:       "Voice Expired Time",
-			Sources:     cli.EnvVars("NOLET_EXPIRED_TIME"),
-			Aliases:     []string{"ex"},
-			Value:       60 * 2,
-			Destination: &LocalConfig.System.Expired,
-			Action: func(ctx context.Context, command *cli.Command, f float64) error {
-				LocalConfig.System.Expired = f
-				return nil
-			},
-		},
 		&cli.StringFlag{
 			Name:        "ICP",
 			Usage:       "Icp Footer Info",
@@ -377,6 +353,18 @@ REJP/5bp
 			Aliases:     []string{"dl"},
 			Value:       "",
 			Destination: &LocalConfig.System.ExportPath,
+		},
+
+		&cli.BoolFlag{
+			Name:        "chttps",
+			Usage:       "custom https",
+			Sources:     cli.EnvVars("NOLET_CUSTOM_HTTPS"),
+			Value:       false,
+			Destination: &LocalConfig.System.CustomHttps,
+			Action: func(ctx context.Context, command *cli.Command, b bool) error {
+				LocalConfig.System.CustomHttps = b
+				return nil
+			},
 		},
 
 		&cli.BoolFlag{
