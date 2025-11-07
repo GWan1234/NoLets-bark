@@ -46,7 +46,7 @@ func CreateSSL() {
 			Province:     []string{"Beijing"},
 			Locality:     []string{"Beijing"},
 			Organization: []string{"NoLetter Inc."},
-			CommonName:   "wzs.app",
+			CommonName:   "localhost",
 			SerialNumber: "001",
 		},
 		NotBefore:             time.Now(),

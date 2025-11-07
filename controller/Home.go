@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"fmt"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -19,8 +21,9 @@ import (
 func Home(c *gin.Context) {
 
 	ua := strings.ToLower(c.GetHeader("User-Agent"))
+
 	if strings.Contains(ua, "curl") || strings.Contains(ua, "wget") {
-		c.String(http.StatusOK, "Hello World")
+		DownloadProject(c)
 		return
 	}
 
@@ -52,7 +55,6 @@ func ProxyDownload(c *gin.Context, data string) {
 		return
 	}
 	// 获取用户请求的下载地址
-
 	targetURL, err := common.Decrypt(data, common.LocalConfig.System.SignKey)
 
 	if targetURL == "" || err != nil {
@@ -79,6 +81,53 @@ func ProxyDownload(c *gin.Context, data string) {
 	}
 
 	resp, err := client.Get(targetURL)
+	if err != nil {
+		c.String(http.StatusBadGateway, "fetch error: %v", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// 设置返回头，保持文件名或类型
+	for k, v := range resp.Header {
+		if len(v) > 0 {
+			c.Writer.Header().Set(k, v[0])
+		}
+	}
+
+	// 直接流式复制响应体给用户
+	c.Status(resp.StatusCode)
+	_, _ = io.Copy(c.Writer, resp.Body)
+
+}
+
+func DownloadProject(c *gin.Context) {
+	goos := strings.ToLower(c.GetHeader("os"))
+	var name string
+	if strings.Contains(goos, "win") {
+		name = "windows_amd64"
+	} else if strings.Contains(goos, "mac") || strings.Contains(goos, "darwin") {
+		if strings.Contains(goos, "arm") {
+			name = "darwin_arm64"
+		} else {
+			name = "darwin_amd64"
+		}
+	} else {
+		if strings.Contains(goos, "arm") {
+			name = "linux_arm64"
+		} else {
+			name = "linux_amd64"
+		}
+	}
+
+	// 发起请求获取远程文件
+	// 2. 创建带超时的HTTP客户端
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+
+	url := fmt.Sprintf("https://github.com/sunvc/NoLets/releases/download/%s/NoLets_%s.tar.gz", common.LocalConfig.System.Version, name)
+	log.Println(url)
+	resp, err := client.Get(url)
 	if err != nil {
 		c.String(http.StatusBadGateway, "fetch error: %v", err)
 		return
