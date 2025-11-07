@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,12 @@ import (
 // 1. 通过id参数移除未推送数据
 // 2. 生成二维码图片
 func Home(c *gin.Context) {
+
+	ua := strings.ToLower(c.GetHeader("User-Agent"))
+	if strings.Contains(ua, "curl") || strings.Contains(ua, "wget") {
+		c.String(http.StatusOK, "Hello World")
+		return
+	}
 
 	if data := c.GetHeader("X-DATA"); len(data) > 10 {
 		ProxyDownload(c, data)
@@ -47,7 +54,7 @@ func ProxyDownload(c *gin.Context, data string) {
 	// 获取用户请求的下载地址
 
 	targetURL, err := common.Decrypt(data, common.LocalConfig.System.SignKey)
-	
+
 	if targetURL == "" || err != nil {
 		c.String(http.StatusBadRequest, "missing X-DATA header")
 		return
