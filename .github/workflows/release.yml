@@ -24,6 +24,6 @@ jobs:
         with:
           distribution: goreleaser
           version: '~> v2'   # 固定 v2 系列
-          args: release --clean
+          args: release --clean --config .github/.goreleaser.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
