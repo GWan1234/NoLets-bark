@@ -21,6 +21,10 @@ func Home(c *gin.Context) {
 	ua := strings.ToLower(c.GetHeader("User-Agent"))
 
 	if strings.Contains(ua, "curl") || strings.Contains(ua, "wget") {
+		if !common.LocalConfig.System.ProxyDownload {
+			c.String(http.StatusBadRequest, "missing")
+			return
+		}
 		DownloadProject(c)
 		return
 	}

@@ -59,7 +59,7 @@ func SetDefaultVersionOrCommID(version, buildDate, commID string) {
 	if len(version) > 0 {
 		LocalConfig.System.Version = version
 	} else {
-		LocalConfig.System.Version = "v2.3.1"
+		LocalConfig.System.Version = "v2.3.7"
 	}
 	if len(commID) > 0 {
 		LocalConfig.System.CommitID = commID
