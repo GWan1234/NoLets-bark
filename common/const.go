@@ -26,8 +26,6 @@ const (
 	Level            = "level"       // 等级
 	Markdown         = "markdown"    // 是否是markdown格式
 	MD               = "md"          // 是否是markdown格式（简写）
-	CurrentIndex     = "index"       // index
-	TotalCount       = "count"       // count
 	UserName         = "username"
 	Password         = "password"
 

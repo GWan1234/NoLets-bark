@@ -87,6 +87,7 @@ docker-compose up -d
 system:
   user: ""                         # 基本認証ユーザー名
   password: ""                     # 基本認証パスワード
+  push_password: ""                # グループプッシュパスワード
   addr: "0.0.0.0:8080"             # サーバーリスニングアドレス
   url_prefix: "/"                  # サービスURLプレフィックス
   data: "./data"                   # データストレージディレクトリ

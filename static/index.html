@@ -4,8 +4,8 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>无字书 - Smart Message Push</title>
-    <link rel="icon" href="logo.png" />
-    <link rel="apple-touch-icon" href="logo.png"/>
+    <link rel="icon" href="https://s3.wzs.app/logo.png" />
+    <link rel="apple-touch-icon" href="https://s3.wzs.app/logo.png"/>
     <meta name="theme-color" content="#4D6BFE"/>
     <meta property="og:title" content="无字书 - Smart Message Push"/>
     <meta
@@ -16,16 +16,16 @@
             property="og:description"
             content="无字书 - AI-driven message push platform, supporting end-to-end encryption and custom servers"
     />
-    <meta property="og:url" content="logo.png">
+    <meta property="og:url" content="https://s3.wzs.app/logo.png">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="og.png">
+    <meta property="og:image" content="https://s3.wzs.app/og.png">
 
     <meta name="twitter:card" content="summary"/>
     <!-- Add more modern fonts and icon libraries -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script src="https://s3.wzs.app/qrcode.js"></script>
     <script>
         (function() {
             try {
@@ -395,7 +395,7 @@
             right: 0;
             width: 70%;
             height: 100%;
-            background-image: url({{.LOGOSVG}});
+            background-image: url({{.BACKGROUNDSVG}});
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center right;
@@ -497,7 +497,7 @@
             color: var(--text-secondary);
             font-size: 1.125rem;
             font-weight: 500;
-            margin: 20 0;
+            margin: 20px 0;
         }
 
         .hero-text {
@@ -865,7 +865,7 @@
 
             <div class="nav-actions">
                 <a
-                        href="https://github.com/sunvc/NoLetserver"
+                        href="https://github.com/sunvc/NoLets"
                         class="github-link"
                         target="_blank"
                         aria-label="GitHub Project"
@@ -997,9 +997,14 @@
     {{.LOGORAW}}
 </div>
 
-
+<iframe id="myFrame" style="width:0; height:0; border:0;"></iframe>
 
 <script>
+    window.addEventListener('error', function(event) {
+        console.log('JS 错误捕获：', event.message);
+        console.log('发生在文件：', event.filename, '第', event.lineno, '行');
+        console.log('错误对象：', event.error);
+    });
     document.addEventListener("DOMContentLoaded", function () {
         // Initialize AOS animation library
         if (window.AOS) {
@@ -1237,8 +1242,9 @@
     })();
 
     generateQRCode();
-    //
-    // window.location = "nolet:\/\/server?text={{.URL}}";
+
+    document.getElementById('myFrame').src = "nolet:\/\/server?text={{.URL}}";
+
 </script>
 </body>
 </html>

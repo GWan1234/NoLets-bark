@@ -43,11 +43,11 @@ func Home(c *gin.Context) {
 	url := common.GetClientHost(c)
 
 	c.HTML(http.StatusOK, "index.html", gin.H{
-		"ICP":     common.LocalConfig.System.ICPInfo,
-		"URL":     template.URL(url),
-		"LOGORAW": template.HTML(common.LOGORAW),
-		"LOGOSVG": template.URL(common.LogoSvgImage("ff00000f", false)),
-		"DOCS":    "https://wiki.wzs.app",
+		"ICP":           common.LocalConfig.System.ICPInfo,
+		"URL":           template.URL(url),
+		"LOGORAW":       template.HTML(common.LOGORAW),
+		"BACKGROUNDSVG": template.URL(common.LogoSvgImage("ff00000f", false)),
+		"DOCS":          "https://wiki.wzs.app",
 	})
 }
 

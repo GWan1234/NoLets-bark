@@ -21,7 +21,7 @@ func SetupRouter(engine *gin.Engine) {
 	// 注册
 	router.GET("/register/:deviceKey", GCMDecryptMiddleware(), controller.Register)
 	router.POST("/register", GCMDecryptMiddleware(), controller.Register)
-
+	router.GET("/robots.txt", controller.RobotText)
 	wellKnowGroup := router.Group("/.well-known")
 	{
 		wellKnowGroup.GET("/apple-app-site-association", controller.AppleSite)

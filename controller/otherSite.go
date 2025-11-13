@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sunvc/NoLets/common"
@@ -19,4 +20,8 @@ func AppleSite(c *gin.Context) {
 			},
 		},
 	})
+}
+
+func RobotText(c *gin.Context) {
+	c.String(http.StatusOK, "User-agent: * \nDisallow: / \nAllow: /$ \n")
 }

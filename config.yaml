@@ -7,7 +7,7 @@
 system:
   user: ""
   password: ""
-  push_password: "123"
+  push_password: ""
   sign_key: ""
   addr: 0.0.0.0:80
   url_prefix: /

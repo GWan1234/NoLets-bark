@@ -96,6 +96,7 @@ docker-compose up -d
 system:
   user: ""                         # 基础认证用户名
   password: ""                     # 基础认证密码
+  push_password: ""                # 群组推送密码
   addr: "0.0.0.0:8080"             # 服务器监听地址
   url_prefix: "/"                  # 服务URL前缀
   data: "./data"                   # 数据存储目录

@@ -19,8 +19,13 @@ func GetImage(c *gin.Context) {
 	}
 
 	if strings.HasSuffix(fileName, ".ico") || strings.HasSuffix(fileName, ".png") {
-		fileName = "logo.png"
+		if strings.HasPrefix(fileName, "og") {
+			fileName = "og.png"
+		} else {
+			fileName = "logo.png"
+		}
 	}
+
 	path := filepath.Join("static", fileName)
 
 	data, err := common.StaticFS.ReadFile(path)

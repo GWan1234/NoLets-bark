@@ -95,6 +95,7 @@ The `config.yaml` in the project is only a configuration file example. **Users n
 system:
   user: ""                  # Basic authentication username
   password: ""              # Basic authentication password
+  push_password: ""         # Group Push Password
   addr: "0.0.0.0:8080"      # Server listening address
   url_prefix: "/"           # Service URL prefix
   data: "./data"            # Data storage directory

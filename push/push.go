@@ -78,21 +78,7 @@ func BatchPush(params *common.ParamsResult, pushType apns2.EPushType) error {
 	)
 
 	for _, token := range params.Tokens {
-		// 分页推送
-		//if len(params.Results) > 0 {
-		//	for _, param := range params.Results {
-		//		wg.Add(1)
-		//		go func(p *common.ParamsMap) {
-		//			defer wg.Done()
-		//			if err := Push(p, pushType, token); err != nil {
-		//				log.Println(err.Error())
-		//				mu.Lock()
-		//				errors = append(errors, err)
-		//				mu.Unlock()
-		//			}
-		//		}(param)
-		//	}
-		//} else {
+
 		wg.Add(1)
 		go func(p *common.ParamsMap) {
 			defer wg.Done()
@@ -103,7 +89,6 @@ func BatchPush(params *common.ParamsResult, pushType apns2.EPushType) error {
 				mu.Unlock()
 			}
 		}(params.Params)
-		//}
 	}
 
 	wg.Wait()

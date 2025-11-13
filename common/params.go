@@ -10,15 +10,12 @@ import (
 	"github.com/wk8/go-ordered-map/v2"
 )
 
-const MaxBytes = 4096
-
 type ParamsMap = orderedmap.OrderedMap[string, interface{}]
 
 // ParamsResult 结构体用于存储和管理请求参数
 // 使用有序映射存储参数，保证参数的处理顺序
 type ParamsResult struct {
-	Params *ParamsMap
-	//Results  []*ParamsMap
+	Params   *ParamsMap
 	Tokens   []string
 	Keys     []string
 	PushType int
@@ -33,7 +30,6 @@ type ParamsResult struct {
 func NewParamsResult(c *gin.Context) *ParamsResult {
 	main := &ParamsResult{
 		Params: orderedmap.New[string, interface{}](),
-		//Results: []*ParamsMap{},
 		Keys:   []string{},
 		Tokens: []string{},
 	}
@@ -43,12 +39,6 @@ func NewParamsResult(c *gin.Context) *ParamsResult {
 	if main.PushType == -1 {
 		return nil
 	}
-
-	// MARK: 分页推送支持
-	//results, err := SplitPayloadIfExceedsLimit(main.Params)
-	//if err == nil {
-	//	main.Results = results
-	//}
 
 	var resultKeys []string
 
@@ -229,22 +219,6 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 // 3. 规范化 category 字段的值
 // 4. 处理声音文件后缀
 func convenientProcessor(params *ParamsMap) {
-	// 如果没有 body 字段，尝试从其他字段转换
-	if _, ok := params.Get(Body); !ok {
-		if data, dataOk := params.Get(Data); dataOk {
-			params.Set(Body, data)
-			params.Delete(Data)
-		} else if content, contentOk := params.Get(Content); contentOk {
-			params.Set(Body, content)
-			params.Delete(Content)
-		} else if message, messageOk := params.Get(Message); messageOk {
-			params.Set(Body, message)
-			params.Delete(Message)
-		} else if text, textOk := params.Get(Text); textOk {
-			params.Set(Body, text)
-			params.Delete(Text)
-		}
-	}
 
 	// 处理 markdown 字段
 	// 如果存在 markdown 字段，将其转换为 body 并设置 category 为 markdown
@@ -266,6 +240,23 @@ func convenientProcessor(params *ParamsMap) {
 	if v, ok := params.Get(Category); ok {
 		if v != CategoryDefault && v != CategoryMarkdown {
 			params.Set(Category, CategoryDefault)
+		}
+	}
+
+	// 如果没有 body 字段，尝试从其他字段转换
+	if _, ok := params.Get(Body); !ok {
+		if data, dataOk := params.Get(Data); dataOk {
+			params.Set(Body, data)
+			params.Delete(Data)
+		} else if content, contentOk := params.Get(Content); contentOk {
+			params.Set(Body, content)
+			params.Delete(Content)
+		} else if message, messageOk := params.Get(Message); messageOk {
+			params.Set(Body, message)
+			params.Delete(Message)
+		} else if text, textOk := params.Get(Text); textOk {
+			params.Set(Body, text)
+			params.Delete(Text)
 		}
 	}
 
