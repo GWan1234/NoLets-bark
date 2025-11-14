@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -78,19 +79,21 @@ func NewParamsResult(c *gin.Context) *ParamsResult {
 
 // NormalizeKey 规范化参数键名
 // 主要功能:
-// 1. 去除首尾空格
-// 2. 移除连字符
-// 3. 转换为小写
+// 1. 去除所有的符号,空格
+// 2. 转为小写, 只保留数字,字母
 // 参数:
 //   - s: 需要规范化的键名字符串
 //
 // 返回:
 //   - string: 规范化后的键名
 func (p *ParamsResult) NormalizeKey(s string) string {
-	result := strings.TrimSpace(s)
-	result = strings.ReplaceAll(result, "-", "")
-	result = strings.ReplaceAll(result, "_", "")
-	return strings.ToLower(result)
+	reg := regexp.MustCompile(`[^a-zA-Z0-9]+`)
+	return strings.ToLower(reg.ReplaceAllString(s, ""))
+}
+
+func RemoveSymbols(s string) string {
+	reg := regexp.MustCompile(`[^\p{L}\p{N}]+`)
+	return reg.ReplaceAllString(s, "")
 }
 
 // Get 获取参数值
@@ -185,7 +188,7 @@ func (p *ParamsResult) HandlerParamsToMapOrder(c *gin.Context) {
 	// POST Body
 	if c.Request.Method == http.MethodPost {
 
-		contentType := c.Request.Header.Get("Content-Type")
+		contentType := c.Request.Header.Get(HeaderContentType)
 		if strings.HasPrefix(contentType, MIMEApplicationJSON) {
 			var jsonData map[string]interface{}
 			err := c.ShouldBindBodyWithJSON(&jsonData)
