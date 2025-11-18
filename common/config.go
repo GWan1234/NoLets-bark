@@ -15,7 +15,7 @@ var LocalConfig = &Config{
 		Password:              "",
 		PushPassword:          "",
 		SignKey:               "",
-		Addr:                  "0.0.0.0:80",
+		Addr:                  "0.0.0.0:8080",
 		URLPrefix:             "/",
 		DataDir:               "./data",
 		DSN:                   "",
