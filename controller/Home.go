@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sunvc/NoLets/common"
@@ -30,6 +30,7 @@ func Home(c *gin.Context) {
 	}
 
 	if data := c.GetHeader("X-DATA"); len(data) > 10 {
+
 		ProxyDownload(c, data)
 		return
 	}
@@ -59,32 +60,11 @@ func ProxyDownload(c *gin.Context, data string) {
 	// 获取用户请求的下载地址
 	targetURL, err := common.Decrypt(data, common.LocalConfig.System.SignKey)
 
-	if targetURL == "" || err != nil {
+	if err != nil {
 		c.String(http.StatusBadRequest, "missing X-DATA header")
 		return
 	}
-
-	// 发起请求获取远程文件
-	// 2. 创建带超时的HTTP客户端
-	client := &http.Client{}
-
-	resp, err := client.Get(targetURL)
-	if err != nil {
-		c.String(http.StatusBadGateway, "fetch error: %v", err)
-		return
-	}
-	defer resp.Body.Close()
-
-	// 设置返回头，保持文件名或类型
-	for k, v := range resp.Header {
-		if len(v) > 0 {
-			c.Writer.Header().Set(k, v[0])
-		}
-	}
-
-	// 直接流式复制响应体给用户
-	c.Status(resp.StatusCode)
-	_, _ = io.Copy(c.Writer, resp.Body)
+	ProxyDownloadData(c, targetURL)
 
 }
 
@@ -106,31 +86,44 @@ func DownloadProject(c *gin.Context) {
 			name = "linux_amd64"
 		}
 	}
+	url := fmt.Sprintf("https://github.com/sunvc/NoLets/releases/download/%s/NoLets_%s.tar.gz", common.LocalConfig.System.Version, name)
+	ProxyDownloadData(c, url)
+
+}
+
+func ProxyDownloadData(c *gin.Context, targetURL string) {
+
+	if targetURL == "" {
+		c.String(http.StatusBadRequest, "missing URL")
+		return
+	}
+
+	var transport = &http.Transport{
+		MaxIdleConns:        10,
+		MaxIdleConnsPerHost: 2,
+		IdleConnTimeout:     10 * time.Second,
+		DisableCompression:  false,
+		ForceAttemptHTTP2:   true,
+	}
 
 	// 发起请求获取远程文件
 	// 2. 创建带超时的HTTP客户端
-	client := &http.Client{}
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   30 * time.Second,
+	}
 
-	url := fmt.Sprintf("https://github.com/sunvc/NoLets/releases/download/%s/NoLets_%s.tar.gz", common.LocalConfig.System.Version, name)
-	log.Println(url)
-	resp, err := client.Get(url)
+	req, _ := http.NewRequest("GET", targetURL, nil)
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0") // CDN 必须加 UA，否则降速
 
-	defer resp.Body.Close()
-
+	resp, err := client.Do(req)
 	if err != nil {
 		c.String(http.StatusBadGateway, "fetch error: %v", err)
 		return
 	}
-
-	// 设置返回头，保持文件名或类型
-	for k, v := range resp.Header {
-		if len(v) > 0 {
-			c.Writer.Header().Set(k, v[0])
-		}
-	}
+	defer resp.Body.Close()
 
 	// 直接流式复制响应体给用户
 	c.Status(resp.StatusCode)
 	_, _ = io.Copy(c.Writer, resp.Body)
-
 }

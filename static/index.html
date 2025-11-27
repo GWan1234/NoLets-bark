@@ -4,8 +4,8 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>无字书 - Smart Message Push</title>
-    <link rel="icon" href="logo.png" />
-    <link rel="apple-touch-icon" href="logo.png"/>
+    <link rel="icon" href="https://s3.wzs.app/logo.png" />
+    <link rel="apple-touch-icon" href="https://s3.wzs.app/logo.png"/>
     <meta name="theme-color" content="#4D6BFE"/>
     <meta property="og:title" content="无字书 - Smart Message Push"/>
     <meta
@@ -16,16 +16,16 @@
             property="og:description"
             content="无字书 - AI-driven message push platform, supporting end-to-end encryption and custom servers"
     />
-    <meta property="og:url" content="logo.png">
+    <meta property="og:url" content="https://s3.wzs.app/logo.png">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="og.png">
+    <meta property="og:image" content="https://s3.wzs.app/og.png">
 
     <meta name="twitter:card" content="summary"/>
     <!-- Add more modern fonts and icon libraries -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.js"></script>
+    <script src="https://s3.wzs.app/qrcode.js"></script>
 
     <script>
         (function() {
@@ -39,7 +39,6 @@
     </script>
 
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap"); /* Splash Screen */
 
         @keyframes bounce {
             0%,
@@ -111,49 +110,6 @@
             }
         }
 
-        @keyframes flyInFromTop {
-            0% {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes flyInFromLeft {
-            0% {
-                transform: scale(0.5) translateX(-200px);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(1) translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes flyInFromRight {
-            0% {
-                transform: scale(0.5) translateX(200px);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(1) translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes flyInFromBottom {
-            0% {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
 
         .main-content {
             transition: opacity 0.5s ease-in;
@@ -221,9 +177,8 @@
         /* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
         @font-face {
             font-family: "阿里妈妈方圆体 VF Regular";
-            src: url("//at.alicdn.com/wf/webfont/FlSsOjbNJAnW/kXFHsnDIXVua.woff2") format("woff2"),
-            url("//at.alicdn.com/wf/webfont/FlSsOjbNJAnW/4rsCVwGtZjL7.woff") format("woff");
-            font-variation-settings: "BEVL" 1, "wght" 200;
+            src: url("//s3.wzs.app/AlimamaFangYuanTiVF-Thin.woff") format("woff");
+            font-variation-settings: "BEVL" 1, "wght" 400;
             font-display: swap;
         }
 
@@ -232,13 +187,11 @@
             padding: 0;
             box-sizing: border-box;
             font-family: "阿里妈妈方圆体 VF Regular", sans-serif;
-            font-variation-settings: "wght" 400, "BEVL" 1;
         }
 
         body {
             line-height: 1.6;
             color: var(--text-primary);
-
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             background: linear-gradient(
@@ -249,10 +202,7 @@
 
             margin: 0;
             padding: 0;
-            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-            Roboto, sans-serif;
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: "阿里妈妈方圆体 VF Regular", sans-serif;
             overflow-x: hidden;
         }
 
@@ -558,7 +508,6 @@
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(10px);
-            transform: translateY(50px);
             opacity: 1;
             display: flex;
             flex-direction: column;
@@ -579,14 +528,12 @@
         }
 
         .feature-card:hover {
-            transform: translateY(-12px) scale(1.02);
+            transform: scale(1.02);
             box-shadow: var(--shadow-lg);
             border-color: var(--primary-dark);
+
         }
 
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
 
         .feature-icon {
             width: 60px;
@@ -1060,7 +1007,7 @@
             .querySelectorAll(".feature-card, .cta-button, .secondary-button")
             .forEach((element) => {
                 element.addEventListener("mouseenter", () => {
-                    element.style.transform = "scale(1.05) translateY(-5px)";
+                    element.style.transform = "scale(1.05)";
                     element.style.boxShadow = "0 20px 40px rgba(0, 0, 0, 0.2)";
                 });
 
@@ -1077,7 +1024,7 @@
                 if (Math.random() > 0.7) {
                     el.style.transform = `rotate(${
                         Math.random() * 4 - 2
-                    }deg) translateY(${Math.random() * 3 - 1.5}px)`;
+                    }deg)`;
                     setTimeout(() => {
                         el.style.transform = "";
                     }, 300);
@@ -1111,13 +1058,13 @@
             }
         });
     });
+    let qrcodeElement = document.getElementById("qrcode")
 
     function generateQRCode() {
         // Get current server URL
         const serverUrl = "{{.URL}}";
-
         // Generate QR code
-        new QRCode(document.getElementById("qrcode"), {
+        new QRCode(qrcodeElement, {
             text: serverUrl,
             width: 200,
             height: 200,
@@ -1125,7 +1072,11 @@
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H,
         });
+
     }
+    qrcodeElement.addEventListener("click", (event)=> {
+        window.location = "{{.URL}}"
+    })
     // i18n translations and auto-detect
     const translations = {
       zh: {

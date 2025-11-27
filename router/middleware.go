@@ -107,7 +107,9 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
+		//timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
+		timestamp, err := strconv.ParseFloat(timestampStr, 64)
+
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
 				http.StatusUnauthorized,
@@ -118,7 +120,7 @@ func GCMDecryptMiddleware() gin.HandlerFunc {
 		}
 
 		now := time.Now().Unix()
-		if now-timestamp > 10 || now < timestamp {
+		if now-int64(timestamp) > 10 || now < int64(timestamp) {
 			c.AbortWithStatusJSON(http.StatusOK, common.Failed(
 				http.StatusUnauthorized,
 				"missing signature",
