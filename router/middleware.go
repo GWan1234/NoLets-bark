@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/sunvc/NoLets/common"
 	"github.com/sunvc/NoLets/controller"
 )
@@ -15,6 +16,8 @@ import (
 func Verification() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
+		requestID, _ := uuid.NewUUID()
+		c.Set("trace_id", requestID)
 
 		// 先查看是否是管理员身份
 		authHeader := c.GetHeader("Authorization")

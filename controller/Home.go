@@ -86,6 +86,7 @@ func DownloadProject(c *gin.Context) {
 			name = "linux_amd64"
 		}
 	}
+
 	url := fmt.Sprintf("https://github.com/sunvc/NoLets/releases/download/%s/NoLets_%s.tar.gz", common.LocalConfig.System.Version, name)
 	ProxyDownloadData(c, url)
 
@@ -122,6 +123,13 @@ func ProxyDownloadData(c *gin.Context, targetURL string) {
 		return
 	}
 	defer resp.Body.Close()
+
+	// 设置返回头，保持文件名或类型
+	for k, v := range resp.Header {
+		if len(v) > 0 {
+			c.Writer.Header().Set(k, v[0])
+		}
+	}
 
 	// 直接流式复制响应体给用户
 	c.Status(resp.StatusCode)
