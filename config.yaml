@@ -8,8 +8,8 @@ system:
   user: ""
   password: ""
   push_password: ""
-  sign_key: ""
-  addr: 0.0.0.0:80
+  sign_key: ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF
+  addr: 0.0.0.0:8080
   url_prefix: /
   data: ./data
   dsn: ""
@@ -22,16 +22,14 @@ system:
   max_device_key_arr_length: 10
   concurrency: 262144
   read_timeout: 3s
-  write_timeout: 3s
+  write_timeout: 0s
   idle_timeout: 10s
   debug: true
-  proxyDownload: false
+  proxyDownload: true
   exportPath: ""
   importPath: ""
-  expired: 120.0
   icp_info: ""
   time_zone: ""
-  voice: false
   auths: []
 apple:
   apnsPrivateKey: |-

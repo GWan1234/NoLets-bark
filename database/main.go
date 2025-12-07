@@ -61,7 +61,8 @@ func ExportOrImport() {
 			return
 		}
 
-		err = os.WriteFile(filePath, data, 0644)
+		err = os.WriteFile(common.BaseDir(filePath), data, 0644)
+		
 		if err != nil {
 			log.Println("Export Failed", err.Error())
 			return

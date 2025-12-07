@@ -204,7 +204,7 @@ func Flags() []cli.Flag {
 			Name:        "write-timeout",
 			Usage:       "The maximum duration before timing out writes of the response",
 			Sources:     cli.EnvVars("NOLET_SERVER_WRITE_TIMEOUT"),
-			Value:       0,
+			Value:       10 * time.Second,
 			Hidden:      true,
 			Destination: &LocalConfig.System.WriteTimeout,
 			Action: func(ctx context.Context, command *cli.Command, duration time.Duration) error {
@@ -350,7 +350,7 @@ REJP/5bp
 			Name:        "import-path",
 			Usage:       "Export Database",
 			Sources:     cli.EnvVars("NOLET_IMPORT_PATH"),
-			Aliases:     []string{"dl"},
+			Aliases:     []string{"dr"},
 			Value:       "",
 			Destination: &LocalConfig.System.ExportPath,
 		},

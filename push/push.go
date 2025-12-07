@@ -12,34 +12,25 @@ import (
 )
 
 // Push message to APNs server
-func Push(params *common.ParamsMap, pushType apns2.EPushType, token string) error {
+func Push(params *common.ParamsResult, pushType apns2.EPushType, token string) error {
 	pl := payload.NewPayload().MutableContent()
 
 	if pushType == apns2.PushTypeBackground {
 		pl = pl.ContentAvailable()
 	} else {
-		pl = pl.AlertTitle(common.PMGet(params, common.Title)).
-			AlertSubtitle(common.PMGet(params, common.Subtitle)).
-			AlertBody(common.PMGet(params, common.Body)).
-			Sound(common.PMGet(params, common.Sound)).
-			TargetContentID(common.PMGet(params, common.ID)).
-			ThreadID(common.PMGet(params, common.Group)).
-			Category(common.PMGet(params, common.Category))
+
+		pl = pl.AlertTitle(params.GetString(common.Title)).
+			AlertSubtitle(params.GetString(common.Subtitle)).
+			AlertBody(params.GetString(common.Body)).
+			Sound(params.GetString(common.Sound)).
+			TargetContentID(params.GetString(common.ID)).
+			ThreadID(params.GetString(common.Group)).
+			Category(params.GetString(common.Category))
 	}
 
 	// 添加自定义参数
-	skipKeys := map[string]struct{}{
-		common.DeviceKey:   {},
-		common.DeviceKeys:  {},
-		common.DeviceToken: {},
-		common.Title:       {},
-		common.Body:        {},
-		common.Sound:       {},
-		common.Category:    {},
-	}
-
-	for pair := params.Oldest(); pair != nil; pair = pair.Next() {
-		if _, skip := skipKeys[pair.Key]; skip {
+	for pair := params.Params.Oldest(); pair != nil; pair = pair.Next() {
+		if _, skip := common.SkipKeys[pair.Key]; skip {
 			continue
 		}
 		pl.Custom(pair.Key, pair.Value)
@@ -51,7 +42,7 @@ func Push(params *common.ParamsMap, pushType apns2.EPushType, token string) erro
 	// 创建并发送通知
 	resp, err := CLI.Push(&apns2.Notification{
 		DeviceToken: token,
-		CollapseID:  fmt.Sprint(params.Value(common.ID)),
+		CollapseID:  params.GetString(common.ID),
 		Topic:       common.LocalConfig.Apple.Topic,
 		Payload:     pl,
 		Expiration:  common.DateNow().Add(24 * time.Hour),
@@ -80,15 +71,15 @@ func BatchPush(params *common.ParamsResult, pushType apns2.EPushType) error {
 	for _, token := range params.Tokens {
 
 		wg.Add(1)
-		go func(p *common.ParamsMap) {
+		go func() {
 			defer wg.Done()
-			if err := Push(params.Params, pushType, token); err != nil {
+			if err := Push(params, pushType, token); err != nil {
 				log.Println(err.Error())
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
 			}
-		}(params.Params)
+		}()
 	}
 
 	wg.Wait()
